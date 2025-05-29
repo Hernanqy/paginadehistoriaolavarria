@@ -1,0 +1,170 @@
+.body1 {
+  
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('./imagenes/fondo.png'); /* Cambia esto por el nombre de tu imagen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.titulo {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.subtitulo {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+.timeline-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timeline-btn {
+  width: 250px;
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.timeline-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px white;
+}
+
+/* Colores personalizados */
+.prehistoria     { background: linear-gradient(45deg, #ff8c00, #ff6600); }
+.antiguedad      { background: linear-gradient(45deg, #e60073, #cc3399); }
+.edad-media      { background: linear-gradient(45deg, #673ab7, #3f51b5); }
+.moderna         { background: linear-gradient(45deg, #009688, #4caf50); }
+.contemporanea   { background: linear-gradient(45deg, #ff9800, #fbc02d); }
+.inicio          { background: linear-gradient(45deg, #ff6e6e, #ff3d3d); }
+
+/* Responsivo */
+@media (max-width: 576px) {
+  .titulo {
+    font-size: 2rem;
+  }
+
+  .timeline-btn {
+    width: 90%;
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
+
+
+body2 {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Video de fondo */
+.video-fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Contenedor del botón */
+.contenido {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Botón de inicio */
+.boton-inicio {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid white;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.boton-inicio:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  color: black;
+  transform: scale(1.05);
+}
+
+
+
+
+/* fortinesFundacion */
+/* Responsive */
+@media (max-width: 768px) {
+  .boton-inicio {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .boton-inicio {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carreta
+{
+    object-fit: cover;
+    height: 200px;
+}
