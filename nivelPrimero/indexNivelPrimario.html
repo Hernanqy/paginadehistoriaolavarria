@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olavarría para Primaria — Interactivos</title>
+  <meta name="description" content="Historia de Olavarría para nivel primario. 6 núcleos con información ampliada y un juego interactivo por cada uno." />
+  <style>
+    :root{
+      --bg:#0f1320; --paper:#0b0e19; --ink:#e8ecff; --muted:#9fb0ff; --accent:#5cf0cf;
+      --c1:#7ad3ff; --c2:#ffd05e; --c3:#72f59a; --c4:#a59bff; --c5:#ff957e; --c6:#ffc3ee;
+      --card:#151b2f; --radius: 18px; --shadow: 0 12px 28px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: radial-gradient(1200px 600px at 10% -10%, #15203d 0, #0f1320 55%, #0b0e19 100%); color:var(--ink)}
+    .app{display:grid; grid-template-columns: 260px 1fr; min-height:100dvh}
+    @media (max-width: 900px){ .app{grid-template-columns: 1fr} }
+    aside{position:sticky; top:0; height:100dvh; background:linear-gradient(180deg,#0b142c,#0b0e19); border-right:1px solid rgba(255,255,255,.06); padding:18px; display:flex; flex-direction:column; gap:14px}
+    @media (max-width: 900px){ aside{position:static; height:auto} }
+    .brand{display:flex; align-items:center; gap:10px; padding:8px 10px; background:#0f1733; border-radius:14px; box-shadow:var(--shadow)}
+    .logo{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg,#25e0bd,#6fb9ff); color:#0b0e19; font-weight:900}
+    .brand small{color:var(--muted)}
+    nav{display:flex; flex-direction:column; gap:8px}
+    nav a{display:flex; align-items:center; gap:10px; padding:10px 12px; text-decoration:none; color:var(--ink); background:#0f1733; border-radius:12px; border:1px solid rgba(255,255,255,.06)}
+    nav a:hover{box-shadow:var(--shadow); transform: translateY(-2px); transition:.15s ease}
+    .dot{width:10px; height:10px; border-radius:50%}
+    header{position:sticky; top:0; z-index:10; background: rgba(11,14,25,.7); backdrop-filter: blur(6px); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1100px; margin:auto; padding:18px 22px}
+    .hero{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
+    .hero h1{margin:0; font-size: clamp(26px, 4.8vw, 40px)}
+    .hero p{margin:0; color:var(--muted)}
+    main{max-width:1100px; margin:auto; padding:24px 20px 80px}
+    .grid{display:grid; gap:18px}
+    .nucleo{display:grid; grid-template-columns: 120px 1fr; gap:18px; background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius: var(--radius); box-shadow: var(--shadow); padding:18px; position:relative; overflow:hidden}
+    @media (max-width: 680px){ .nucleo{grid-template-columns: 80px 1fr} }
+    .numero{width:120px; height:120px; border-radius: 24px; display:grid; place-items:center; font-weight:900; font-size:64px; color:#0b0e19; box-shadow: inset 0 -10px 0 rgba(0,0,0,.15)}
+    .head h2{margin:0; font-size: clamp(20px, 3.6vw, 28px)}
+    .head p{margin:4px 0 0; color:var(--muted)}
+    .content{grid-column: 1 / -1; display:grid; grid-template-columns: 1.2fr .8fr; gap:16px}
+    @media (max-width: 900px){ .content{grid-template-columns: 1fr} }
+    .card{background:#111831; border:1px solid rgba(255,255,255,.06); border-radius: 16px; padding:14px}
+    .card h3{margin:0 0 8px}
+    .card ul{margin:0; padding-left:18px}
+    .card li{margin:6px 0}
+    .game{background:#0f1733; border:1px dashed rgba(255,255,255,.2); border-radius:16px; padding:14px; min-height:170px}
+    .small{font-size:12px; color:var(--muted)}
+    .btn{background:var(--accent); color:#001218; border:0; padding:10px 12px; border-radius:12px; font-weight:800; cursor:pointer}
+    .btn:active{transform: translateY(1px)}
+    .ok{color:#72f59a; font-weight:800}
+    .bad{color:#ff9a8a; font-weight:800}
+    .n1 .numero{background: linear-gradient(135deg,var(--c1),#46b6ff)}
+    .n2 .numero{background: linear-gradient(135deg,var(--c2),#ffb21a)}
+    .n3 .numero{background: linear-gradient(135deg,var(--c3),#28d57a)}
+    .n4 .numero{background: linear-gradient(135deg,var(--c4),#786eff)}
+    .n5 .numero{background: linear-gradient(135deg,var(--c5),#ff7b64)}
+    .n6 .numero{background: linear-gradient(135deg,var(--c6),#ff98df)}
+    .nucleo::after{content:""; position:absolute; right:-30px; top:-30px; width:200px; height:200px; opacity:.12; border-radius:50%; background: conic-gradient(from 0deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6))}
+    footer{text-align:center; color:var(--muted); padding:28px 12px 60px}
+    /* Juegos específicos */
+    /* Núcleo 1: brújula */
+    .compass{display:grid; place-items:center; gap:8px}
+    .rose{position:relative; width:180px; height:180px; border-radius:50%; border:2px solid rgba(255,255,255,.15)}
+    .rose button{position:absolute; width:56px; height:56px; border-radius:50%; border:0; font-weight:900; cursor:pointer}
+    .rose .N{top:-10px; left:50%; transform:translate(-50%,0)}
+    .rose .S{bottom:-10px; left:50%; transform:translate(-50%,0)}
+    .rose .E{left:calc(100% - 46px); top:50%; transform:translate(0,-50%)}
+    .rose .O{left:-10px; top:50%; transform:translate(0,-50%)}
+    /* Núcleo 2 y 5: drag & drop chips */
+    .bank,.bins{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{background:#182246; padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.18); cursor:grab}
+    .drop{min-height:64px; border:2px dashed rgba(255,255,255,.25); border-radius:12px; padding:8px}
+    /* Núcleo 3: ordenar lista */
+    .steps{list-style:none; padding:0; margin:0}
+    .steps li{display:flex; align-items:center; gap:8px; background:#101a38; border:1px solid rgba(255,255,255,.1); padding:8px 10px; border-radius:10px; margin:6px 0}
+    .steps button{padding:6px 10px; border-radius:8px; border:0; cursor:pointer}
+    /* Núcleo 4: antes/después */
+    .slider-wrap{position:relative; height:200px; border-radius:12px; overflow:hidden; background:linear-gradient(135deg,#334,#556)}
+    .after{position:absolute; inset:0; background:linear-gradient(135deg,#394d2a,#627f43)}
+    .mask{position:absolute; inset:0; overflow:hidden}
+    .mask .before{position:absolute; inset:0; background:linear-gradient(135deg,#555,#777)}
+    .slider{width:100%}
+    /* Núcleo 6: afiche */
+    .poster{min-height:140px; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="logo">OV</div>
+        <div>
+          <strong>Olavarría Primaria</strong><br>
+          <small>6 núcleos | juegos interactivos</small>
+        </div>
+      </div>
+      <nav aria-label="Navegación de secciones">
+        <a href="#n1"><span class="dot" style="background:var(--c1)"></span> 1. Territorio y ambiente</a>
+        <a href="#n2"><span class="dot" style="background:var(--c2)"></span> 2. Pueblos originarios</a>
+        <a href="#n3"><span class="dot" style="background:var(--c3)"></span> 3. Fortines y frontera</a>
+        <a href="#n4"><span class="dot" style="background:var(--c4)"></span> 4. Fundación y vida urbana</a>
+        <a href="#n5"><span class="dot" style="background:var(--c5)"></span> 5. Trabajo, piedra e industria</a>
+        <a href="#n6"><span class="dot" style="background:var(--c6)"></span> 6. Presente y futuros</a>
+      </nav>
+    </aside>
+
+    <div>
+      <header>
+        <div class="wrap hero">
+          <div>
+            <h1>Historia de Olavarría — Nivel Primario</h1>
+            <p>Información ampliada + un juego por núcleo para aprender haciendo.</p>
+          </div>
+          <button class="btn btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Arriba</button>
+        </div>
+      </header>
+
+      <main class="wrap">
+        <div class="grid">
+          <!-- Núcleo 1 -->
+          <section id="n1" class="nucleo n1" aria-labelledby="t1">
+            <div class="numero" aria-hidden="true">1</div>
+            <div class="head">
+              <h2 id="t1">Territorio y ambiente</h2>
+              <p>Sierras, arroyos y clima: mapas simples para ubicarnos.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>Ubicar en un mapa local <strong>Sierras Bayas</strong>, <strong>Hinojo</strong> y el <strong>Arroyo Tapalqué</strong>.</li>
+                  <li>Diferenciar paisaje <em>natural</em> (sierras, arroyo) y <em>modificado</em> (puentes, plazas).</li>
+                  <li>Orientarse con el sol: sale por el <strong>Este</strong> y se oculta por el <strong>Oeste</strong>.</li>
+                </ul>
+                <p class="small">Competencias: noción espacial, lectura de croquis, cuidado ambiental.</p>
+              </div>
+              <div class="card game" id="game1">
+                <h3>Juego: Brújula pampeana</h3>
+                <p>Respondé: <em>¿Dónde sale el sol?</em> Tocá el punto correcto.</p>
+                <div class="compass" aria-label="Brújula interactiva">
+                  <div class="rose">
+                    <button class="N" data-dir="N">N</button>
+                    <button class="S" data-dir="S">S</button>
+                    <button class="E" data-dir="E">E</button>
+                    <button class="O" data-dir="O">O</button>
+                  </div>
+                </div>
+                <p id="g1out"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Núcleo 2 -->
+          <section id="n2" class="nucleo n2" aria-labelledby="t2">
+            <div class="numero" aria-hidden="true">2</div>
+            <div class="head">
+              <h2 id="t2">Pueblos originarios</h2>
+              <p>Presencias indígenas en la región y sus modos de vida.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>Relatos, objetos y <strong>memorias</strong> como fuentes para conocer el pasado.</li>
+                  <li>La importancia del <strong>territorio</strong> y el cuidado del agua.</li>
+                  <li>Diversidad cultural: <em>costumbres, lenguas y saberes</em>.</li>
+                </ul>
+                <p class="small">Actitud: respeto, escucha, reconocimiento de derechos.</p>
+              </div>
+              <div class="card game" id="game2">
+                <h3>Juego: Uní palabra con idea</h3>
+                <p>Arrastrá cada palabra al concepto que corresponde.</p>
+                <div class="bank" aria-label="Banco de palabras">
+                  <span class="chip" draggable="true" data-match="memoria">Memoria</span>
+                  <span class="chip" draggable="true" data-match="territorio">Territorio</span>
+                  <span class="chip" draggable="true" data-match="diversidad">Diversidad</span>
+                </div>
+                <div class="bins" style="margin-top:8px">
+                  <div class="drop" data-bin="memoria">Historias y recuerdos de las personas</div>
+                  <div class="drop" data-bin="territorio">Lugar que cuidamos y habitamos</div>
+                  <div class="drop" data-bin="diversidad">Costumbres y lenguas distintas</div>
+                </div>
+                <p id="g2out"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Núcleo 3 -->
+          <section id="n3" class="nucleo n3" aria-labelledby="t3">
+            <div class="numero" aria-hidden="true">3</div>
+            <div class="head">
+              <h2 id="t3">Fortines y frontera</h2>
+              <p>Viajes, postas y comunicaciones en el siglo XIX.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>¿Qué era un <strong>fortín</strong> y para qué servía?</li>
+                  <li>Oficios: <em>soldado</em>, <em>mensajero</em>, <em>puestero</em>.</li>
+                  <li>Las cartas como forma de comunicación y fuente histórica.</li>
+                </ul>
+                <p class="small">Habilidad: ordenar cronológicamente y justificar.</p>
+              </div>
+              <div class="card game" id="game3">
+                <h3>Juego: Ordená el viaje</h3>
+                <ol class="steps" id="steps">
+                  <li><button data-act="up">↑</button><button data-act="down">↓</button> El mensajero <strong>descansa en la posta</strong>.</li>
+                  <li><button data-act="up">↑</button><button data-act="down">↓</button> <strong>Recibe</strong> una carta en el pueblo.</li>
+                  <li><button data-act="up">↑</button><button data-act="down">↓</button> <strong>Entrega</strong> la carta en el fortín.</li>
+                </ol>
+                <button class="btn" id="checkSteps" style="margin-top:8px">Comprobar</button>
+                <p id="g3out"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Núcleo 4 -->
+          <section id="n4" class="nucleo n4" aria-labelledby="t4">
+            <div class="numero" aria-hidden="true">4</div>
+            <div class="head">
+              <h2 id="t4">Fundación y vida urbana</h2>
+              <p>Nacimiento de la ciudad, plaza, ferias y escuela.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>La plaza como <strong>centro cívico</strong> y de encuentro.</li>
+                  <li>Comparar <em>fotos antiguas</em> y <em>actuales</em> para ver cambios.</li>
+                  <li>Servicios y oficios en torno a la plaza (correo, escuela, ferias).</li>
+                </ul>
+                <p class="small">Habilidad: observar, describir, comparar.</p>
+              </div>
+              <div class="card game" id="game4">
+                <h3>Juego: Antes / Después</h3>
+                <div class="slider-wrap" aria-label="Comparador de imágenes">
+                  <div class="after"></div>
+                  <div class="mask" id="mask">
+                    <div class="before"></div>
+                  </div>
+                </div>
+                <input id="slider" class="slider" type="range" min="0" max="100" value="50" aria-label="Deslizador antes/después"/>
+                <p class="small">Deslizá para comparar (simulación sin fotos reales).</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Núcleo 5 -->
+          <section id="n5" class="nucleo n5" aria-labelledby="t5">
+            <div class="numero" aria-hidden="true">5</div>
+            <div class="head">
+              <h2 id="t5">Trabajo, piedra e industria</h2>
+              <p>Cantidades, materiales y energía del desarrollo local.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>Canteras y uso de la <strong>piedra</strong> en construcciones.</li>
+                  <li>Seguridad y cuidado del ambiente en el trabajo.</li>
+                  <li>Primeras nociones de energías renovables en la zona.</li>
+                </ul>
+                <p class="small">Habilidad: clasificar por material y uso.</p>
+              </div>
+              <div class="card game" id="game5">
+                <h3>Juego: Clasificá materiales</h3>
+                <div class="bank" aria-label="Objetos para clasificar">
+                  <span class="chip" draggable="true" data-type="piedra">Adoquín</span>
+                  <span class="chip" draggable="true" data-type="metal">Clavo</span>
+                  <span class="chip" draggable="true" data-type="arcilla">Ladrillo crudo</span>
+                  <span class="chip" draggable="true" data-type="piedra">Piedra laja</span>
+                  <span class="chip" draggable="true" data-type="metal">Herramienta</span>
+                </div>
+                <div class="bins" style="margin-top:8px">
+                  <div class="drop" data-accept="piedra">Piedra</div>
+                  <div class="drop" data-accept="metal">Metal</div>
+                  <div class="drop" data-accept="arcilla">Arcilla</div>
+                </div>
+                <p id="g5out"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Núcleo 6 -->
+          <section id="n6" class="nucleo n6" aria-labelledby="t6">
+            <div class="numero" aria-hidden="true">6</div>
+            <div class="head">
+              <h2 id="t6">Presente y futuros</h2>
+              <p>Participación, patrimonio y proyectos para cuidar la ciudad.</p>
+            </div>
+            <div class="content">
+              <div class="card">
+                <h3>Aprendé</h3>
+                <ul>
+                  <li>Qué es <strong>patrimonio</strong> y cómo protegerlo.</li>
+                  <li>Mapa de lugares importantes (escuela, museo, arroyo).</li>
+                  <li>Compromisos de aula para esta semana.</li>
+                </ul>
+                <p class="small">Actitud: cuidado, participación y trabajo en equipo.</p>
+              </div>
+              <div class="card game" id="game6">
+                <h3>Juego: ¡Nuestro afiche!</h3>
+                <p>Elegí 3 compromisos y generá un afiche de aula.</p>
+                <div>
+                  <label><input type="checkbox" class="c6" value="Cuidar el arroyo"/> Cuidar el arroyo</label><br>
+                  <label><input type="checkbox" class="c6" value="Separar residuos"/> Separar residuos</label><br>
+                  <label><input type="checkbox" class="c6" value="Plantar un árbol"/> Plantar un árbol</label><br>
+                  <label><input type="checkbox" class="c6" value="Respetar patrimonios"/> Respetar patrimonios</label><br>
+                  <label><input type="checkbox" class="c6" value="Ahorrar agua"/> Ahorrar agua</label>
+                </div>
+                <button class="btn" id="makePoster" style="margin-top:8px">Crear Afiche</button>
+                <div class="poster" id="poster"></div>
+                <p id="g6out"></p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <small>Versión interactiva inicial • Lista para sumar imágenes reales, audio y más desafíos.</small>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Utilidad
+    const byId = (id)=>document.getElementById(id);
+    const qs = (sel,root=document)=>root.querySelector(sel);
+    const qsa = (sel,root=document)=>Array.from(root.querySelectorAll(sel));
+
+    // JUEGO 1: Brújula pampeana (respuesta: Este)
+    qsa('#game1 .rose button').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const ok = btn.dataset.dir === 'E';
+        byId('g1out').textContent = ok ? '¡Correcto! El sol sale por el Este.' : 'Casi. Probá otra vez: recordá que sale por el Este.';
+        byId('g1out').className = ok ? 'ok' : 'bad';
+      });
+    });
+
+    // Drag & drop helpers (usados en juegos 2 y 5)
+    let dragData = null;
+    qsa('.chip').forEach(ch=>{
+      ch.addEventListener('dragstart', (e)=>{ dragData = ch; e.dataTransfer.setData('text/plain', ch.textContent); });
+    });
+    qsa('.drop').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=> e.preventDefault());
+      zone.addEventListener('drop', ()=>{
+        if(!dragData) return;
+        // Juego 2: match palabra/idea
+        if(zone.dataset.bin){
+          const ok = dragData.dataset.match === zone.dataset.bin;
+          zone.appendChild(dragData);
+          byId('g2out').textContent = ok ? '¡Bien! Palabra unida al concepto correcto.' : 'Se puede conversar, pero esa palabra va mejor en otro concepto.';
+          byId('g2out').className = ok ? 'ok' : 'bad';
+        }
+        // Juego 5: clasificar materiales
+        if(zone.dataset.accept){
+          const ok = dragData.dataset.type === zone.dataset.accept;
+          zone.appendChild(dragData);
+          byId('g5out').textContent = ok ? '¡Correcto! Material clasificado.' : 'Probá moverlo a otra categoría.';
+          byId('g5out').className = ok ? 'ok' : 'bad';
+        }
+        dragData = null;
+      });
+    });
+
+    // JUEGO 3: Ordená el viaje (orden correcto: Recibe, Descansa, Entrega)
+    const steps = byId('steps');
+    steps.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button'); if(!btn) return;
+      const li = e.target.closest('li');
+      if(btn.dataset.act==='up' && li.previousElementSibling){ li.parentNode.insertBefore(li, li.previousElementSibling); }
+      if(btn.dataset.act==='down' && li.nextElementSibling){ li.parentNode.insertBefore(li.nextElementSibling, li); }
+    });
+    byId('checkSteps').addEventListener('click', ()=>{
+      const order = qsa('#steps li').map(li=>li.textContent.trim());
+      const ok = order[0].includes('Recibe') && order[1].includes('descansa') && order[2].includes('Entrega');
+      byId('g3out').textContent = ok ? '¡Perfecto! Ése es el recorrido lógico del mensajero.' : 'Aún no. Pensá: primero recibe, luego descansa en la posta y por último entrega.';
+      byId('g3out').className = ok ? 'ok' : 'bad';
+    });
+
+    // JUEGO 4: Antes/Después (slider que ajusta máscara)
+    const slider = byId('slider');
+    const mask = byId('mask');
+    const setMask = (v)=>{ mask.style.width = v + '%'; };
+    setMask(slider.value);
+    slider.addEventListener('input', (e)=> setMask(e.target.value));
+
+    // JUEGO 6: Afiche de compromisos
+    byId('makePoster').addEventListener('click', ()=>{
+      const checks = qsa('#game6 .c6:checked').map(c=>c.value);
+      if(checks.length !== 3){
+        byId('g6out').textContent = 'Elegí exactamente 3 compromisos.';
+        byId('g6out').className = 'bad';
+        return;
+      }
+      const poster = byId('poster');
+      poster.innerHTML = `<h4>Afiche del Aula</h4><ol>${checks.map(t=>`<li>${t}</li>`).join('')}</ol>`;
+      byId('g6out').textContent = '¡Listo! Pegamos el afiche en el aula y lo cumplimos.';
+      byId('g6out').className = 'ok';
+    });
+  </script>
+</body>
+</html>
